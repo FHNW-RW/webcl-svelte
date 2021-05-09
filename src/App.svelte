@@ -1,37 +1,41 @@
 <script>
-    import Eye from './Eye.svelte';
+  import Eye from './Eye.svelte';
+
+  let rightEye;
+  let leftEye;
+
+  function handleMousemove(event) {
+    rightEye.moveIris(event);
+    leftEye.moveIris(event);
+  }
 </script>
 
-<main>
-    <h1>Svelte</h1>
-    <p>SVG Eyes build with <a href="https://svelte.dev/">Svelte</a></p>
-    <div class="eye-row">
-        <Eye class="eye-col"/>
-        <Eye class="eye-col"/>
-    </div>
+<main on:mousemove={handleMousemove}>
+  <h1>Svelte</h1>
+  <p>SVG Eyes build with <a href="https://svelte.dev/">Svelte</a></p>
+
+  <Eye bind:this={leftEye} />
+  <Eye bind:this={rightEye} />
 </main>
 
 <style>
-    main {
-        text-align: center;
-        padding: 1em;
-        max-width: 240px;
-        margin: 0 auto;
-    }
+  main {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+  }
 
-    h1 {
-        color: #ff3e00;
-        text-transform: uppercase;
-        font-size: 4em;
-        font-weight: 100;
-    }
+  h1 {
+    color: #ff3e00;
+    text-transform: uppercase;
+    font-size: 4em;
+    font-weight: 100;
+  }
 
-    .eye-row {
-        display: flex;
-    }
-
-    .eye-col {
-        flex: 1;
-        padding: 1em;
-    }
+  .eye-col {
+    display: inline-block;
+    padding: 1em;
+    max-width: 120px;
+  }
 </style>
