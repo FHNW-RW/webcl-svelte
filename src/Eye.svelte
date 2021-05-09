@@ -7,8 +7,10 @@
   let irisEllipse;
   let closeLidLayer;
   let openLidLayer;
+  export let mouseX;
+  export let mouseY;
 
-  let mouseCoords = writable({ x: 50, y: 50 });
+  let mouseCoords = writable({ x: 60, y: 60 });
 
   export function closeOrOpenLids() {
     closeLidLayer.style.opacity = lidsOpen ? '1' : '0';
@@ -16,17 +18,41 @@
   }
 
   function moveIris(e) {
+    //rect should be size of svg
+    let svg = document.getElementById("eye")
+    let rect = svg.getBoundingClientRect()
     // TODO: center eyes to center
     // TODO: limit eyes to not go outside. See: https://github.com/WebEngineering-FHNW/webcl-fs21-2/blob/main/week7/svg-eyes-sketch/Eyes.html
     // TODO: Is there an easier way with Svelte? Bindings, Motion? Check https://svelte.dev/tutorial/spring
-    const rect = e.target.getBoundingClientRect();
-    const xm = e.clientX - rect.left;
-    const ym = e.clientY - rect.top;
-    mouseCoords.set({ x: xm, y: ym });
+    const xo = rect.x + rect.width/2;
+    console.log(rect)
+    const yo = rect.y + rect.height/2;
+    const xm = e.clientX - xo;
+    const ym = e.clientY - yo;
+
+    const xmax = rect.width/1.5;
+    const ymax = rect.height/2;
+
+    const widestFocus = 400; // when x is so far away, the eye is maximal extended
+
+    const scaledX = xm * (xmax / widestFocus );
+    let   xe = xm > 0
+            ? Math.min( xmax, scaledX)
+            : Math.max(-xmax, scaledX);
+    const scaledY = ym * (ymax / widestFocus );
+    let   ye = ym > 0
+            ? Math.min( ymax, scaledY)
+            : Math.max(-ymax, scaledY);
+    if (xe*xe + ye*ye > xmax * ymax) {
+      xe *= 0.9;
+      ye *= 0.9;
+    }
+
+    mouseCoords.set({ x: xe, y: ye });
   }
 </script>
 
-<svg viewBox="0 0 120 120" on:mousemove={moveIris} on:click={closeOrOpenLids}>
+<svg id="eye" viewBox="0 0 120 120" on:mousemove={moveIris} on:click={closeOrOpenLids}>
   <filter id="shadow">
     <feGaussianBlur in="SourceAlpha" stdDeviation="3" />
     <feOffset dx="0" dy="8" />

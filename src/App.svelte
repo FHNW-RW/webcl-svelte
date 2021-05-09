@@ -1,13 +1,26 @@
 <script>
     import Eye from './Eye.svelte';
+    let wh = window.innerHeight;
+    let ww = window.innerWidth;
+
+    // init it to something random if mouse starts outside window
+    let mx = Math.random() * ww;
+    let my = Math.random() * wh;
+
+    function onmousemove(event) {
+        mouseX = event.pageX - rect.x
+        mouseY = event.pageY - rect.y
+    }
+
+
 </script>
 
 <main>
     <h1>Svelte</h1>
     <p>SVG Eyes build with <a href="https://svelte.dev/">Svelte</a></p>
-    <div class="eye-row">
-        <Eye class="eye-col"/>
-        <Eye class="eye-col"/>
+    <div id=class="eye-row" on:mousemove={onmousemove}>
+        <Eye class="eye-col" {mouseX} {mouseY} />
+        <Eye class="eye-col" {mouseX} {mouseY} />
     </div>
 </main>
 
