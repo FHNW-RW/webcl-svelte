@@ -24,6 +24,7 @@
     // TODO: center eyes to center
     // TODO: limit eyes to not go outside. See: https://github.com/WebEngineering-FHNW/webcl-fs21-2/blob/main/week7/svg-eyes-sketch/Eyes.html
     // TODO: Is there an easier way with Svelte? Bindings, Motion? Check https://svelte.dev/tutorial/spring
+    // TODO: Set intervall for blinking eyes
     const xo = rect.x + rect.width/2;
     console.log(rect)
     const yo = rect.y + rect.height/2;
