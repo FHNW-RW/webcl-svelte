@@ -1,11 +1,31 @@
 <script>
-  let lidsClosed = false;
+  import { onMount } from 'svelte';
+
+  // when x is so far away, the eye is maximal extended
+  const widestFocus = 400;
 
   let iris;
   let irisEllipse;
+  let origin;
+  let max;
+  let lidsClosed = false;
 
   // reactivity assignment: https://svelte.dev/tutorial/reactive-assignments
   $: closeLidOpacity = lidsClosed ? '1' : '0';
+
+  onMount(() => {
+    const rect = irisEllipse.getBoundingClientRect();
+
+    origin = {
+      x: rect.x + rect.width / 2,
+      y: rect.y + rect.height / 2,
+    };
+
+    max = {
+      x: rect.width / 1.5,
+      y: rect.height / 2,
+    };
+  });
 
   setInterval(() => {
     if (lidsClosed) return; // do not close and then open if already closed
@@ -18,22 +38,15 @@
   }
 
   export function moveIris(evt) {
-    const rect = irisEllipse.getBoundingClientRect();
-    const xo = rect.x + rect.width / 2; // x-origin
-    const yo = rect.y + rect.height / 2; // y-origin
+    // the normalized x/y coords to work with
+    const xm = evt.clientX - origin.x;
+    const ym = evt.clientY - origin.y;
 
-    const xm = evt.clientX - xo; // the normalized x/y coords to work with
-    const ym = evt.clientY - yo;
-
-    const xmax = rect.width / 1.5;
-    const ymax = rect.height / 2;
-
-    const widestFocus = 400; // when x is so far away, the eye is maximal extended
-    const scaledX = xm * (xmax / widestFocus);
-    let xe = xm > 0 ? Math.min(xmax, scaledX) : Math.max(-xmax, scaledX);
-    const scaledY = ym * (ymax / widestFocus);
-    let ye = ym > 0 ? Math.min(ymax, scaledY) : Math.max(-ymax, scaledY);
-    if (xe * xe + ye * ye > xmax * ymax) {
+    const scaledX = xm * (max.x / widestFocus);
+    let xe = xm > 0 ? Math.min(max.x, scaledX) : Math.max(-max.x, scaledX);
+    const scaledY = ym * (max.y / widestFocus);
+    let ye = ym > 0 ? Math.min(max.y, scaledY) : Math.max(-max.y, scaledY);
+    if (xe * xe + ye * ye > max.x * max.y) {
       xe *= 0.9;
       ye *= 0.9;
     }
