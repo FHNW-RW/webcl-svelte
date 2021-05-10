@@ -10,10 +10,12 @@
   }
 </script>
 
+<!-- events: https://svelte.dev/tutorial/dom-events -->
 <main on:mousemove={handleMousemove}>
   <h1>Svelte</h1>
   <p>SVG Eyes build with <a href="https://svelte.dev/">Svelte</a></p>
 
+  <!-- this binding: https://svelte.dev/tutorial/bind-this -->
   <Eye bind:this={leftEye} />
   <Eye bind:this={rightEye} />
 </main>
