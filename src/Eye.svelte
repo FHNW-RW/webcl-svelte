@@ -6,11 +6,12 @@
 
   let iris;
   let irisEllipse;
+  
   let origin;
   let max;
   let lidsClosed = false;
 
-  // reactivity assignment: https://svelte.dev/tutorial/reactive-assignments
+  // reactivity declarations: https://svelte.dev/tutorial/reactive-declarations
   $: closeLidOpacity = lidsClosed ? '1' : '0';
 
   // component lifecycle: https://svelte.dev/tutorial/onmount
